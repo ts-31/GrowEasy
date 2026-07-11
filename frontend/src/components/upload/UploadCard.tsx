@@ -16,13 +16,20 @@ import { formatBytes } from '@/utils/formatBytes';
 import { useCsvParser } from '@/hooks/useCsvParser';
 import CsvPreview from '@/components/upload/CsvPreview';
 
-export default function UploadCard() {
+interface UploadCardProps {
+  /** Called with the File when the user clicks Confirm Import */
+  onConfirm: (file: File) => void;
+  /** True while the parent is processing the import (disables the button) */
+  isImporting?: boolean;
+}
+
+export default function UploadCard({ onConfirm, isImporting = false }: UploadCardProps) {
   const [file, setFile] = React.useState<File | null>(null);
   const [dropError, setDropError] = React.useState<string | null>(null);
 
   const { status, result, error: parseError, parseFile, reset } = useCsvParser();
 
-  // Trigger parsing whenever a new file is selected
+  // Trigger client-side parsing whenever a new file is selected
   useEffect(() => {
     if (file) {
       parseFile(file);
@@ -47,6 +54,7 @@ export default function UploadCard() {
     onDrop,
     accept: { 'text/csv': ['.csv'] },
     multiple: false,
+    disabled: isImporting,
   });
 
   const handleRemoveFile = () => {
@@ -55,8 +63,26 @@ export default function UploadCard() {
     reset();
   };
 
+  const handleConfirm = () => {
+    if (file) onConfirm(file);
+  };
+
+  const loadSampleCsv = async (filename: string) => {
+    try {
+      setDropError(null);
+      const response = await fetch(`/csv/${filename}`);
+      if (!response.ok) throw new Error('Failed to load sample');
+      const blob = await response.blob();
+      const loadedFile = new File([blob], filename, { type: 'text/csv' });
+      setFile(loadedFile);
+    } catch (err) {
+      setDropError('Could not load sample file.');
+    }
+  };
+
   const hasError = !!dropError;
-  const isImportReady = status === 'success' && result !== null;
+  const isPreviewReady = status === 'success' && result !== null;
+  const canConfirm = isPreviewReady && !isImporting;
 
   return (
     <div className="w-full space-y-6">
@@ -72,42 +98,65 @@ export default function UploadCard() {
         <CardContent className="space-y-4">
           {/* Dropzone — shown when no file selected */}
           {!file && (
-            <div
-              {...getRootProps()}
-              className={[
-                'border-2 border-dashed rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer transition-all duration-200',
-                isDragActive
-                  ? 'border-primary bg-primary/5 scale-[1.02]'
-                  : hasError
-                  ? 'border-destructive/50 bg-destructive/5'
-                  : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-accent/50',
-              ].join(' ')}
-            >
-              <input {...getInputProps()} />
+            <div className="space-y-6">
               <div
-                className={`p-4 rounded-full mb-4 ${
-                  hasError ? 'bg-destructive/10' : 'bg-primary/10'
-                }`}
+                {...getRootProps()}
+                className={[
+                  'border-2 border-dashed rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer transition-all duration-200',
+                  isDragActive
+                    ? 'border-primary bg-primary/5 scale-[1.02]'
+                    : hasError
+                    ? 'border-destructive/50 bg-destructive/5'
+                    : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-accent/50',
+                ].join(' ')}
               >
-                <CloudUpload
-                  className={`w-8 h-8 ${hasError ? 'text-destructive' : 'text-primary'}`}
-                />
-              </div>
-              {isDragActive ? (
-                <p className="text-base font-medium text-primary">
-                  Drop the CSV file here…
-                </p>
-              ) : (
-                <div className="text-center">
-                  <p className="text-base font-medium text-foreground">
-                    Drag &amp; drop a CSV file here, or{' '}
-                    <span className="text-primary hover:underline">browse</span>
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Only .csv files are supported
-                  </p>
+                <input {...getInputProps()} />
+                <div
+                  className={`p-4 rounded-full mb-4 ${
+                    hasError ? 'bg-destructive/10' : 'bg-primary/10'
+                  }`}
+                >
+                  <CloudUpload
+                    className={`w-8 h-8 ${hasError ? 'text-destructive' : 'text-primary'}`}
+                  />
                 </div>
-              )}
+                {isDragActive ? (
+                  <p className="text-base font-medium text-primary">
+                    Drop the CSV file here…
+                  </p>
+                ) : (
+                  <div className="text-center">
+                    <p className="text-base font-medium text-foreground">
+                      Drag &amp; drop a CSV file here, or{' '}
+                      <span className="text-primary hover:underline">browse</span>
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Only .csv files are supported
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Sample Files Loader */}
+              <div className="pt-2 border-t">
+                <p className="text-sm font-medium text-center text-muted-foreground mb-3">
+                  Or try with sample data (4 records each):
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Button variant="outline" size="sm" onClick={() => loadSampleCsv('facebook_leads.csv')}>
+                    Facebook Leads
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => loadSampleCsv('google_ads_leads.csv')}>
+                    Google Ads
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => loadSampleCsv('real_estate_crm.csv')}>
+                    Real Estate
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => loadSampleCsv('messy_contacts.csv')}>
+                    Messy Contacts
+                  </Button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -132,6 +181,7 @@ export default function UploadCard() {
                 variant="ghost"
                 size="icon"
                 onClick={handleRemoveFile}
+                disabled={isImporting}
                 className="text-muted-foreground hover:text-destructive shrink-0"
                 aria-label="Remove selected file"
               >
@@ -151,11 +201,13 @@ export default function UploadCard() {
 
         <CardFooter>
           <Button
+            id="confirm-import-btn"
             className="w-full text-base font-medium"
             size="lg"
-            disabled={!isImportReady}
+            disabled={!canConfirm}
+            onClick={handleConfirm}
           >
-            Confirm Import
+            {isImporting ? 'Processing…' : 'Confirm Import'}
           </Button>
         </CardFooter>
       </Card>

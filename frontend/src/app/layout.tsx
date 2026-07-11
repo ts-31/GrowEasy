@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/common/Navbar";
 import "./globals.css";
 
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "GrowEasy CSV Importer",
-  description: "A fast and reliable CSV importer for GrowEasy.",
+  description: "AI-powered CSV importer that intelligently maps any CSV format into GrowEasy CRM fields.",
 };
 
 export default function RootLayout({
@@ -27,12 +28,15 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Navbar />
-        <main className="flex-1 flex flex-col">
-          {children}
-        </main>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar />
+          <main className="flex-1 flex flex-col">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

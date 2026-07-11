@@ -1,0 +1,6 @@
+Date,Lead Name,Primary Email,Phone Number,Company,Location,Campaign Name,Keyword,Ad Group,Status
+2023-11-01,Alice Green,alice.green@example.com,+1 (555) 123-4567,Green Tech,"Seattle, WA",Search_NonBrand_Software,crm software,Software Solutions,New
+2023-11-02,Bob White,bob.white@example.org,555-987-6543,White Logistics,"Austin, TX",Display_Remarketing,,Previous Visitors,Contacted
+2023-11-03,Charlie Black,charlie.b@test.com,+44 20 7946 0958,Black Consulting,"London, UK",Search_Brand,groweasy crm,Brand Terms,Qualified
+2023-11-04,Diana Prince,diana.prince@example.net,555-111-2222,Prince Enterprises,"Miami, FL",Search_Competitor,salesforce alternative,Competitor Analysis,New
+2023-11-05,Edward King,edward.king@demo.com,+1 555-333-4444,King Corp,"Denver, CO",Video_Awareness,,YouTube Ads,New

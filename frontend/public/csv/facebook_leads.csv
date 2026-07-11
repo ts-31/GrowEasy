@@ -1,0 +1,6 @@
+id,created_time,ad_id,ad_name,adset_id,adset_name,campaign_id,campaign_name,form_id,form_name,is_organic,platform,full_name,phone_number,email,city,company_name
+1,2023-10-27T10:00:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,John Doe,555-0101,johndoe@example.com,New York,Acme Corp
+2,2023-10-27T10:15:00+0000,102,Prospecting_V2,202,Lookalike_Audience,301,Q4_Promo,402,Demo_Request,false,fb,Jane Smith,555-0102,janesmith@test.com,Los Angeles,Global Tech
+3,2023-10-27T10:30:00Z,103,Brand_Awareness,203,Broad_Audience,302,Brand_Launch,403,Newsletter_Sign_up,true,ig,Mike Johnson,555-0103,mikej@example.net,Chicago,Innovate Inc
+4,2023-10-27T11:00:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Emily Davis,555-0104,emilyd@example.org,Houston,Davis LLC
+5,2023-10-27T11:20:00+0000,104,Lookalike_V1,204,Similar_Buyers,303,Holiday_Special,404,Discount_Claim,false,fb,Chris Wilson,555-0105,chrisw@demo.com,Phoenix,Wilson Bros
