@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   type ColumnDef,
 } from '@tanstack/react-table';
+import { ChevronRight } from 'lucide-react';
 import type { CrmRecord } from '@/types/crm';
 
 const CRM_COLUMNS: { key: keyof CrmRecord; label: string }[] = [
@@ -40,6 +41,30 @@ interface CrmTableProps {
 }
 
 export default function CrmTable({ records }: CrmTableProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+
+  // Track scroll position to show/hide fade hints
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [records]);
+
   const columns = useMemo<ColumnDef<CrmRecord>[]>(
     () =>
       CRM_COLUMNS.map(({ key, label }) => ({
@@ -51,7 +76,6 @@ export default function CrmTable({ records }: CrmTableProps) {
           if (!value) {
             return <span className="text-muted-foreground italic text-xs">—</span>;
           }
-          // Special badge rendering for crm_status
           if (key === 'crm_status') {
             const style = STATUS_STYLES[value] ?? 'bg-muted text-muted-foreground';
             return (
@@ -80,39 +104,76 @@ export default function CrmTable({ records }: CrmTableProps) {
   });
 
   return (
-    <div className="relative overflow-auto rounded-lg border border-border max-h-[520px]">
-      <table className="min-w-full table-auto text-left text-sm">
-        <thead className="sticky top-0 z-10 bg-muted">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="whitespace-nowrap px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide border-b border-border"
+    <div className="space-y-2">
+      {/* Scroll hint — shown when table has overflowing content */}
+      {canScrollRight && (
+        <div className="flex items-center justify-end gap-1 text-xs text-muted-foreground animate-fade-in">
+          <span>Scroll to see more columns</span>
+          <ChevronRight className="w-3.5 h-3.5 animate-bounce-x" />
+        </div>
+      )}
+
+      {/* Table wrapper */}
+      <div className="relative rounded-xl border border-border overflow-hidden">
+        {/* Left fade overlay */}
+        {canScrollLeft && (
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 z-20 bg-gradient-to-r from-card to-transparent" />
+        )}
+
+        {/* Right fade overlay + animated arrow */}
+        {canScrollRight && (
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-20 flex items-center justify-end pr-2 bg-gradient-to-l from-card via-card/80 to-transparent">
+            <div className="flex flex-col gap-1">
+              {[0, 1, 2].map((i) => (
+                <ChevronRight
+                  key={i}
+                  className="w-3.5 h-3.5 text-primary/60"
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Scrollable area with custom styled scrollbar */}
+        <div
+          ref={scrollRef}
+          className="overflow-auto max-h-[520px] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-muted/40 [&::-webkit-scrollbar-thumb]:bg-primary/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-primary/60"
+        >
+          <table className="min-w-full table-auto text-left text-sm">
+            <thead className="sticky top-0 z-10 bg-muted">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="whitespace-nowrap px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide border-b border-border"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody className="divide-y divide-border">
+              {table.getRowModel().rows.map((row, idx) => (
+                <tr
+                  key={row.id}
+                  className={`transition-colors hover:bg-primary/5 ${idx % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-3 align-top">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="divide-y divide-border">
-          {table.getRowModel().rows.map((row, idx) => (
-            <tr
-              key={row.id}
-              className={idx % 2 === 0 ? 'bg-background' : 'bg-muted/30'}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-3 align-top">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
