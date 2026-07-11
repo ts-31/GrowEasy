@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { parseCsvFile } from '../services/csvService';
+import { processCsvRecordsInBatches } from '../services/batchService';
 import { deleteFile } from '../utils/deleteFile';
 
 export async function importCsvController(
@@ -16,17 +17,21 @@ export async function importCsvController(
   const filePath = req.file.path;
 
   try {
-    const result = await parseCsvFile(filePath);
+    // Step 1: Parse CSV → raw records
+    const csvResult = await parseCsvFile(filePath);
+
+    // Step 2: Run all records through AI batch extraction
+    const batchResult = await processCsvRecordsInBatches(csvResult.records);
 
     res.status(200).json({
       success: true,
-      metadata: result.metadata,
-      records: result.records,
+      summary: batchResult.summary,
+      records: batchResult.records,
     });
   } catch (err) {
     next(err); // Pass to centralized error handler
   } finally {
-    // Always delete the temp file
+    // Always delete the temp file regardless of success or failure
     deleteFile(filePath);
   }
 }
