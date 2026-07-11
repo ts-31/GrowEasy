@@ -1,12 +1,9 @@
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
+import os from 'os';
 
-// Ensure the uploads directory exists
-const uploadsDir = path.resolve(process.cwd(), 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// Use the OS temporary directory (works in serverless environments like Vercel)
+const uploadsDir = os.tmpdir();
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
