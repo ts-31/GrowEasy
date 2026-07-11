@@ -2,9 +2,17 @@
 
 import React from 'react';
 import { CheckCircle2, SkipForward, XCircle, FileUp, RefreshCw, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import CrmTable from '@/components/table/CrmTable';
 import type { ImportResult } from '@/types/crm';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { exportToCsv, exportToExcel } from '@/utils/exportUtils';
 
 interface ImportResultsProps {
   result: ImportResult;
@@ -13,6 +21,16 @@ interface ImportResultsProps {
 
 export default function ImportResults({ result, onReset }: ImportResultsProps) {
   const { summary, records } = result;
+
+  const handleExportCsv = () => {
+    const filename = `groweasy-crm-export-${Date.now()}.csv`;
+    exportToCsv(records, filename);
+  };
+
+  const handleExportExcel = () => {
+    const filename = `groweasy-crm-export-${Date.now()}.xlsx`;
+    exportToExcel(records, filename);
+  };
 
   return (
     <div className="w-full space-y-6 animate-fade-in">
@@ -29,10 +47,28 @@ export default function ImportResults({ result, onReset }: ImportResultsProps) {
             </p>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={onReset} className="gap-2 hover:border-primary/40 hover:text-primary transition-colors">
-          <RefreshCw className="w-3.5 h-3.5" />
-          Import Another File
-        </Button>
+        <div className="flex items-center gap-2">
+          {records.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className={buttonVariants({ variant: 'default', size: 'sm', className: 'gap-2 shadow-sm cursor-pointer' })}>
+                <FileUp className="w-3.5 h-3.5" />
+                Export CRM
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleExportCsv} className="cursor-pointer">
+                  Download as CSV
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleExportExcel} className="cursor-pointer">
+                  Download as Excel (.xlsx)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          <Button variant="outline" size="sm" onClick={onReset} className="gap-2 hover:border-primary/40 hover:text-primary transition-colors">
+            <RefreshCw className="w-3.5 h-3.5" />
+            Import Another File
+          </Button>
+        </div>
       </div>
 
       {/* Summary cards */}
