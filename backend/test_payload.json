@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "1",
+    "created_time": "2023-10-27T10:00:00+0000",
+    "ad_id": "101",
+    "ad_name": "Retargeting_V1",
+    "adset_name": "Website_Visitors",
+    "campaign_name": "Q4_Promo",
+    "form_name": "Lead_Gen_Form",
+    "is_organic": "false",
+    "platform": "fb",
+    "full_name": "John Doe",
+    "phone_number": "555-0101",
+    "email": "johndoe@example.com",
+    "city": "New York",
+    "company_name": "Acme Corp"
+  }
+}
