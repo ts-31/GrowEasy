@@ -1,0 +1,26 @@
+id,created_time,ad_id,ad_name,adset_id,adset_name,campaign_id,campaign_name,form_id,form_name,is_organic,platform,full_name,phone_number,email,city,company_name
+1,2023-10-27T10:00:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,John Doe,555-0101,johndoe@example.com,New York,Acme Corp
+2,2023-10-27T10:15:00+0000,102,Prospecting_V2,202,Lookalike_Audience,301,Q4_Promo,401,Lead_Gen_Form,false,ig,Jane Smith,555-0102,janesmith@test.com,Los Angeles,Global Tech
+3,2023-10-27T10:30:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Mike Johnson,555-0103,mikej@example.net,Chicago,Innovate Inc
+4,2023-10-27T11:00:00+0000,,,,,,,,true,fb,Emily Davis,555-0104,emilyd@example.org,Houston,Davis LLC
+5,2023-10-27T11:20:00+0000,103,Video_Ad_1,203,Broad_Audience,302,Brand_Awareness,402,Newsletter_Signup,false,ig,Chris Wilson,555-0105,chrisw@demo.com,Phoenix,
+6,2023-10-27T12:00:00+0000,102,Prospecting_V2,202,Lookalike_Audience,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Sarah Brown,555-0106,,Philadelphia,Brown Enterprises
+7,2023-10-27T12:45:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,ig,David Miller,,davidm@example.com,San Antonio,Miller Co
+8,2023-10-27T13:10:00+0000,104,Carousel_Ad_2,204,Interest_Based,303,Product_Launch,403,Demo_Request,false,fb,Lisa Taylor,555-0108,lisat@test.net,San Diego,Taylor & Sons
+9,2023-10-27T14:00:00+0000,103,Video_Ad_1,203,Broad_Audience,302,Brand_Awareness,402,Newsletter_Signup,false,fb,James Anderson,555-0109,jamesa@example.org,Dallas,Anderson Group
+10,2023-10-27T14:30:00+0000,,,,,,,,true,ig,Ashley Thomas,555-0110,ashleyt@demo.com,San Jose,
+11,2023-10-27T15:15:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Robert Jackson,555-0111,robertj@example.com,Austin,Jackson Tech
+12,2023-10-27T15:45:00+0000,102,Prospecting_V2,202,Lookalike_Audience,301,Q4_Promo,401,Lead_Gen_Form,false,ig,Amanda White,555-0112,amandaw@test.com,Jacksonville,White Solutions
+13,2023-10-27T16:20:00+0000,104,Carousel_Ad_2,204,Interest_Based,303,Product_Launch,403,Demo_Request,false,fb,William Harris,,williamh@example.net,Fort Worth,Harris Industries
+14,2023-10-27T17:00:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Megan Martin,555-0114,meganm@example.org,Columbus,Martin Consulting
+15,2023-10-27T17:30:00+0000,103,Video_Ad_1,203,Broad_Audience,302,Brand_Awareness,402,Newsletter_Signup,false,ig,Richard Thompson,555-0115,,Charlotte,
+16,2023-10-27T18:10:00+0000,,,,,,,,true,fb,Jessica Garcia,555-0116,jessicag@example.com,San Francisco,Garcia LLC
+17,2023-10-27T18:50:00+0000,102,Prospecting_V2,202,Lookalike_Audience,301,Q4_Promo,401,Lead_Gen_Form,false,ig,Joseph Martinez,555-0117,josephm@test.net,Indianapolis,Martinez Group
+18,2023-10-27T19:25:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Karen Robinson,555-0118,karenr@example.org,Seattle,Robinson Co
+19,2023-10-27T20:00:00+0000,104,Carousel_Ad_2,204,Interest_Based,303,Product_Launch,403,Demo_Request,false,fb,Thomas Clark,555-0119,thomasc@demo.com,Denver,Clark Enterprises
+20,2023-10-27T20:45:00+0000,103,Video_Ad_1,203,Broad_Audience,302,Brand_Awareness,402,Newsletter_Signup,false,ig,Nancy Rodriguez,555-0120,nancyr@example.com,Washington,
+21,2023-10-27T21:15:00+0000,,,,,,,,true,ig,Charles Lewis,555-0121,charlesl@test.com,Boston,Lewis Solutions
+22,2023-10-27T21:50:00+0000,101,Retargeting_V1,201,Website_Visitors,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Elizabeth Lee,555-0122,elizabethl@example.net,El Paso,Lee Tech
+23,2023-10-27T22:30:00+0000,102,Prospecting_V2,202,Lookalike_Audience,301,Q4_Promo,401,Lead_Gen_Form,false,fb,Daniel Walker,555-0123,danielw@example.org,Nashville,Walker LLC
+24,2023-10-27T23:05:00+0000,104,Carousel_Ad_2,204,Interest_Based,303,Product_Launch,403,Demo_Request,false,ig,Margaret Hall,,margareth@demo.com,Detroit,Hall Consulting
+25,2023-10-27T23:45:00+0000,103,Video_Ad_1,203,Broad_Audience,302,Brand_Awareness,402,Newsletter_Signup,false,fb,Matthew Allen,555-0125,matthewa@example.com,Memphis,Allen Group
